@@ -1,28 +1,21 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import classnames from 'classnames';
+import './App.scss';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const App = () => {
+  const [isDarkMode, setDarkMode] = useState(false);
+
+  const changeDarkMode = () => {
+    setDarkMode(!isDarkMode);
+  };
+
+  return (
+    <div className={classnames('app', {
+      'app--dark': isDarkMode,
+    })}>
+      <button onClick={changeDarkMode}>Set to {isDarkMode ? 'light' : 'dark'}</button>
+    </div>
+  );
 }
 
 export default App;
