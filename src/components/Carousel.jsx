@@ -10,7 +10,7 @@ const defaultProps = {
   startIndex: 0,
 }
 
-const Carousel = ({ children, startIndex }) => {
+const Carousel = ({ children, startIndex, before, after }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
 
   const childrenCount = Children.count(children);
@@ -26,13 +26,18 @@ const Carousel = ({ children, startIndex }) => {
     }
   }
 
+  const refProps = {
+    setPreviousSlide: () => changeToNeighborIndex(false),
+    setNextSlide: () => changeToNeighborIndex(true),
+  }
+
   return (
     <div>
-      <button type="button" onClick={() => changeToNeighborIndex(false)}>Anterior</button>
+      {before(refProps)}
       <div className="carousel">
         {children[currentIndex]}
       </div>
-      <button type="button" onClick={() => changeToNeighborIndex(true)}>Proximo</button>
+      {after(refProps)}
     </div>
   );
 }
