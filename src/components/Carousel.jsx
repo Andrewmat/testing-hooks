@@ -11,8 +11,8 @@ const propTypes = {
   loop: PropTypes.bool,
 };
 
-const defaultBefore = ({ setPreviousSlide }) => <button onClick={setPreviousSlide}>{"<"}</button>;
-const defaultAfter = ({ setNextSlide }) => <button onClick={setNextSlide}>{">"}</button>;
+const defaultBefore = ({ setPrevious }) => <button onClick={setPrevious}>{"<"}</button>;
+const defaultAfter = ({ setNext }) => <button onClick={setNext}>{">"}</button>;
 
 const defaultProps = {
   startIndex: 0,
@@ -22,15 +22,17 @@ const defaultProps = {
 }
 
 const Carousel = ({ children, startIndex, before, after, loop }) => {
-  const { next, previous, item } = useIterator(
+  const { item, next, hasNext, previous, hasPrevious } = useIterator(
     Children.toArray(children),
     loop,
     startIndex
   );
 
   const refProps = {
-    setPreviousSlide: previous,
-    setNextSlide: next,
+    setPrevious: previous,
+    setNext: next,
+    isFirst: !(loop || hasPrevious),
+    isLast: !(loop || hasNext),
   };
 
   return (

@@ -2,14 +2,15 @@ import React from 'react';
 import Carousel from '../components/Carousel';
 import Async from '../components/Async';
 import { fetchPerson } from '../services/swService';
+import range from '../utils/range';
 import './Carousel.scss';
 
-const beforeButton = ({ setPreviousSlide }) => (
-  <button onClick={setPreviousSlide}>Previous</button>
+const beforeButton = ({ setPrevious, isFirst }) => (
+  <button onClick={setPrevious} disabled={isFirst}>Previous</button>
 );
 
-const afterButton = ({ setNextSlide }) => (
-  <button onClick={setNextSlide}>Next</button>
+const afterButton = ({ setNext, isLast }) => (
+  <button onClick={setNext} disabled={isLast}>Next</button>
 );
 
 export default () => (
@@ -19,8 +20,12 @@ export default () => (
       after={afterButton}
     >
       {
-        [1,2,3,4,5,6,7,8,9,10].map(i => (
-          <Async promise={async () => fetchPerson(i)} placeholder={<div>Loading...</div>} key={i}>
+        range(10, 1).map(i => (
+          <Async
+            key={i}
+            promise={() => fetchPerson(i)}
+            placeholder={<div className="carousel-item">Loading...</div>}
+          >
             {
               (data, error) => (
                 <div className="carousel-item">

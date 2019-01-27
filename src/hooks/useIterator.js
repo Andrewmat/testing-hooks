@@ -19,6 +19,8 @@ export default function useIterator(list, loop = false, startIndex = 0) {
     index,
     item: list[index],
     next: () => setIndexLimited(index + 1),
+    hasNext: index < list.length - 1,
     previous: () => setIndexLimited(index - 1),
+    hasPrevious: index !== 0,
   };
 }

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { useReducer } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -7,25 +7,67 @@ const propTypes = {
   placeholder: PropTypes.element.isRequired,
 };
 
-const Async = memo(({ children, promise, placeholder }) => {
-  const [response, setResponse] = useState();
-  const [error, setError] = useState();
 
-  if (response || error) {
-    return children(response, error);
+const flux = {
+  reducer: (state, { type, payload }) => {
+    switch (type) {
+      case 'fetch':
+      return {
+        ...state,
+        pending: true,
+      };
+      case 'fulfilled':
+      return {
+        ...state,
+        data: payload,
+        error: undefined,
+        pending: false,
+      };
+      case 'rejected':
+      return {
+        ...state,
+        error: payload,
+        pending: false,
+      };
+      default:
+      return state;
+    }
+  },
+  initialState: {
+    pending: false,
+    data: undefined,
+    error: undefined,
+  },
+  actions: {
+    fetch: () => ({ type: 'fetch' }),
+    fulfilled: data => ({ type: 'fulfilled', payload: data }),
+    rejected: error => ({ type: 'rejected', payload: error }),
+  }
+};
+
+const Async = ({ children, promise, placeholder }) => {
+  const [{ pending, data, error }, dispatch] = useReducer(flux.reducer, flux.initialState);
+
+  if (pending) {
+    return placeholder;
   }
 
+  if (data || error) {
+    return children(data, error);
+  }
+
+  dispatch(flux.actions.fetch());
   promise()
     .then(resp => {
-      setResponse(resp);
-      setError(undefined);
+      dispatch(flux.actions.fulfilled(resp));
     })
     .catch(error => {
-      setError(error);
+      const message = error.statusText || error.status;
+      dispatch(flux.actions.rejected(new Error(message)));
     });
 
   return placeholder;
-});
+};
 
 Async.propTypes = propTypes;
 
