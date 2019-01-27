@@ -1,6 +1,5 @@
 import { useReducer } from 'react'
 import PropTypes from 'prop-types'
-import useAsyncCache from '../hooks/useAsyncCache'
 
 const propTypes = {
   children: PropTypes.func.isRequired,
@@ -45,22 +44,11 @@ const flux = {
   },
 }
 
-const Async = ({ children, promise, placeholder, cacheKey }) => {
+const Async = ({ children, promise, placeholder }) => {
   const [{ pending, data, error }, dispatch] = useReducer(
     flux.reducer,
     flux.initialState,
   )
-  const cachedPromise = useAsyncCache(() => {
-    dispatch(flux.actions.fetch())
-    promise()
-      .then(resp => {
-        dispatch(flux.actions.fulfilled(resp))
-      })
-      .catch(resp => {
-        const message = resp.statusText || resp.status
-        dispatch(flux.actions.rejected(new Error(message)))
-      })
-  })
 
   if (pending) {
     return placeholder
@@ -70,7 +58,14 @@ const Async = ({ children, promise, placeholder, cacheKey }) => {
     return children(data, error)
   }
 
-  cachedPromise(cacheKey)
+  dispatch(flux.actions.fetch())
+  promise()
+    .then(resp => dispatch(flux.actions.fulfilled(resp)))
+    .catch(resp =>
+      dispatch(
+        flux.actions.rejected(new Error(resp.statusText || resp.status)),
+      ),
+    )
 
   return null
 }
