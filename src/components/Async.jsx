@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -6,7 +6,6 @@ const propTypes = {
   promise: PropTypes.func.isRequired,
   placeholder: PropTypes.element.isRequired,
 };
-
 
 const flux = {
   reducer: (state, { type, payload }) => {
@@ -47,6 +46,17 @@ const flux = {
 
 const Async = ({ children, promise, placeholder }) => {
   const [{ pending, data, error }, dispatch] = useReducer(flux.reducer, flux.initialState);
+  const memoPromise = useCallback(() => {
+    dispatch(flux.actions.fetch());
+    promise()
+      .then(resp => {
+        dispatch(flux.actions.fulfilled(resp));
+      })
+      .catch(resp => {
+        const message = resp.statusText || resp.status;
+        dispatch(flux.actions.rejected(new Error(message)));
+      });
+  }, [promise]);
 
   if (pending) {
     return placeholder;
@@ -56,17 +66,9 @@ const Async = ({ children, promise, placeholder }) => {
     return children(data, error);
   }
 
-  dispatch(flux.actions.fetch());
-  promise()
-    .then(resp => {
-      dispatch(flux.actions.fulfilled(resp));
-    })
-    .catch(error => {
-      const message = error.statusText || error.status;
-      dispatch(flux.actions.rejected(new Error(message)));
-    });
+  memoPromise();
 
-  return placeholder;
+  return null;
 };
 
 Async.propTypes = propTypes;
