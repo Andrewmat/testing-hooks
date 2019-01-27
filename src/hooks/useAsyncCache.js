@@ -1,6 +1,6 @@
 import { useState, useDebugValue } from 'react'
 
-export default function useCache(callback) {
+export default function useAsyncCache(asyncCallback) {
   const [map, setMap] = useState({})
   useDebugValue(Object.keys(map).length)
 
@@ -10,13 +10,13 @@ export default function useCache(callback) {
   function setEntry(key, value) {
     setMap({
       ...map,
-      key: value,
+      [key]: value,
     })
   }
-  return function(key) {
+  return async function(key) {
     let value = getEntry(key)
     if (value === undefined) {
-      value = callback(key)
+      value = await asyncCallback(key)
       setEntry(key, value)
     }
     return value

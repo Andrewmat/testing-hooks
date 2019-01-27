@@ -1,6 +1,6 @@
 import { useReducer } from 'react'
 import PropTypes from 'prop-types'
-import useCache from '../hooks/useCache'
+import useAsyncCache from '../hooks/useAsyncCache'
 
 const propTypes = {
   children: PropTypes.func.isRequired,
@@ -50,7 +50,7 @@ const Async = ({ children, promise, placeholder, cacheKey }) => {
     flux.reducer,
     flux.initialState,
   )
-  const cachedPromise = useCache(() => {
+  const cachedPromise = useAsyncCache(() => {
     dispatch(flux.actions.fetch())
     promise()
       .then(resp => {

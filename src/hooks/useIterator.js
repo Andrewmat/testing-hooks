@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useDebugValue } from 'react'
 
 export default function useIterator(list, loop = false, startIndex = 0) {
   const [index, setIndex] = useState(startIndex)
+  useDebugValue(index)
 
   function setIndexLimited(newIndex) {
     if (newIndex >= 0 && newIndex < list.length) {
