@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react"
 
 export default function useIterator(list, loop = false, startIndex = 0) {
-  const [index, setIndex] = useState(startIndex);
+  const [index, setIndex] = useState(startIndex)
 
   function setIndexLimited(newIndex) {
     if (newIndex >= 0 && newIndex < list.length) {
-      setIndex(newIndex);
+      setIndex(newIndex)
     } else if (loop) {
       // loop
-      setIndex(newIndex >= list.length ? 0 : list.length - 1);
+      setIndex(newIndex >= list.length ? 0 : list.length - 1)
     } else {
       // on edge
-      setIndex(Math.min(Math.max(newIndex, 0), list.length - 1));
+      setIndex(Math.min(Math.max(newIndex, 0), list.length - 1))
     }
   }
 
@@ -22,5 +22,5 @@ export default function useIterator(list, loop = false, startIndex = 0) {
     hasNext: index < list.length - 1,
     previous: () => setIndexLimited(index - 1),
     hasPrevious: index !== 0,
-  };
+  }
 }

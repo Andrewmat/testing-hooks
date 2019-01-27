@@ -1,7 +1,7 @@
-import React, { Children } from 'react';
-import PropTypes from 'prop-types';
+import React, { Children } from "react"
+import PropTypes from "prop-types"
 
-import useIterator from '../hooks/useIterator';
+import useIterator from "../hooks/useIterator"
 
 const propTypes = {
   children: PropTypes.node.isRequired,
@@ -9,10 +9,12 @@ const propTypes = {
   after: PropTypes.func,
   before: PropTypes.func,
   loop: PropTypes.bool,
-};
+}
 
-const defaultBefore = ({ setPrevious }) => <button onClick={setPrevious}>{"<"}</button>;
-const defaultAfter = ({ setNext }) => <button onClick={setNext}>{">"}</button>;
+const defaultBefore = ({ setPrevious }) => (
+  <button onClick={setPrevious}>{"<"}</button>
+)
+const defaultAfter = ({ setNext }) => <button onClick={setNext}>{">"}</button>
 
 const defaultProps = {
   startIndex: 0,
@@ -25,15 +27,15 @@ const Carousel = ({ children, startIndex, before, after, loop }) => {
   const { item, next, hasNext, previous, hasPrevious } = useIterator(
     Children.toArray(children),
     loop,
-    startIndex
-  );
+    startIndex,
+  )
 
   const refProps = {
     setPrevious: previous,
     setNext: next,
     isFirst: !(loop || hasPrevious),
     isLast: !(loop || hasNext),
-  };
+  }
 
   return (
     <div>
@@ -41,10 +43,10 @@ const Carousel = ({ children, startIndex, before, after, loop }) => {
       {item}
       {after && after(refProps)}
     </div>
-  );
+  )
 }
 
-Carousel.propTypes = propTypes;
-Carousel.defaultProps = defaultProps;
+Carousel.propTypes = propTypes
+Carousel.defaultProps = defaultProps
 
 export default Carousel

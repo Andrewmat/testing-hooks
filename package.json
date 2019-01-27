@@ -60,10 +60,23 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "lint": "eslint **/*.{js,jsx}"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": ["react-app", "prettier"],
+    "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": "error"
+    }
+  },
+  "eslintIgnore": ["/config/**/*", "/scripts/**/*"],
+  "prettier": {
+    "endOfLine": "auto",
+    "semi": false,
+    "arrowParens": "avoid",
+    "trailingComma": "all",
+    "jsxSingleQuote": true
   },
   "browserslist": [
     ">0.2%",
@@ -116,5 +129,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^3.0.1"
   }
 }
