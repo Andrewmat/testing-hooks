@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 export default function useIterator(list, loop = false, startIndex = 0) {
   const [index, setIndex] = useState(startIndex)

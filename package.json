@@ -76,7 +76,8 @@
     "semi": false,
     "arrowParens": "avoid",
     "trailingComma": "all",
-    "jsxSingleQuote": true
+    "jsxSingleQuote": true,
+    "singleQuote": true
   },
   "browserslist": [
     ">0.2%",

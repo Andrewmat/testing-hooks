@@ -1,5 +1,6 @@
-import { useReducer, useCallback } from "react"
-import PropTypes from "prop-types"
+import { useReducer } from 'react'
+import PropTypes from 'prop-types'
+import useCache from '../hooks/useCache'
 
 const propTypes = {
   children: PropTypes.func.isRequired,
@@ -10,19 +11,19 @@ const propTypes = {
 const flux = {
   reducer: (state, { type, payload }) => {
     switch (type) {
-      case "fetch":
+      case 'fetch':
         return {
           ...state,
           pending: true,
         }
-      case "fulfilled":
+      case 'fulfilled':
         return {
           ...state,
           data: payload,
           error: undefined,
           pending: false,
         }
-      case "rejected":
+      case 'rejected':
         return {
           ...state,
           error: payload,
@@ -38,18 +39,18 @@ const flux = {
     error: undefined,
   },
   actions: {
-    fetch: () => ({ type: "fetch" }),
-    fulfilled: data => ({ type: "fulfilled", payload: data }),
-    rejected: error => ({ type: "rejected", payload: error }),
+    fetch: () => ({ type: 'fetch' }),
+    fulfilled: data => ({ type: 'fulfilled', payload: data }),
+    rejected: error => ({ type: 'rejected', payload: error }),
   },
 }
 
-const Async = ({ children, promise, placeholder }) => {
+const Async = ({ children, promise, placeholder, cacheKey }) => {
   const [{ pending, data, error }, dispatch] = useReducer(
     flux.reducer,
     flux.initialState,
   )
-  const memoPromise = useCallback(() => {
+  const cachedPromise = useCache(() => {
     dispatch(flux.actions.fetch())
     promise()
       .then(resp => {
@@ -59,7 +60,7 @@ const Async = ({ children, promise, placeholder }) => {
         const message = resp.statusText || resp.status
         dispatch(flux.actions.rejected(new Error(message)))
       })
-  }, [promise])
+  })
 
   if (pending) {
     return placeholder
@@ -69,7 +70,7 @@ const Async = ({ children, promise, placeholder }) => {
     return children(data, error)
   }
 
-  memoPromise()
+  cachedPromise(cacheKey)
 
   return null
 }

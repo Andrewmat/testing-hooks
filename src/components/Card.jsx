@@ -1,5 +1,5 @@
-import React from "react"
-import "./Card.scss"
+import React from 'react'
+import './Card.scss'
 
 const Card = ({ data }) => (
   <div className='card'>

@@ -1,7 +1,7 @@
-import React, { Children } from "react"
-import PropTypes from "prop-types"
+import React, { Children } from 'react'
+import PropTypes from 'prop-types'
 
-import useIterator from "../hooks/useIterator"
+import useIterator from '../hooks/useIterator'
 
 const propTypes = {
   children: PropTypes.node.isRequired,
@@ -12,9 +12,9 @@ const propTypes = {
 }
 
 const defaultBefore = ({ setPrevious }) => (
-  <button onClick={setPrevious}>{"<"}</button>
+  <button onClick={setPrevious}>{'<'}</button>
 )
-const defaultAfter = ({ setNext }) => <button onClick={setNext}>{">"}</button>
+const defaultAfter = ({ setNext }) => <button onClick={setNext}>{'>'}</button>
 
 const defaultProps = {
   startIndex: 0,

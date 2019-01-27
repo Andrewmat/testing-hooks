@@ -1,11 +1,11 @@
-import React from "react"
-import Carousel from "../components/Carousel"
-import Card from "../components/Card"
-import Async from "../components/Async"
-import useToggle from "../hooks/useToggle"
-import { fetchPerson } from "../services/swService"
-import range from "../utils/range"
-import "./Carousel.scss"
+import React from 'react'
+import Carousel from '../components/Carousel'
+import Card from '../components/Card'
+import Async from '../components/Async'
+import useToggle from '../hooks/useToggle'
+import { fetchPerson } from '../services/swService'
+import range from '../utils/range'
+import './Carousel.scss'
 
 const beforeButton = ({ setPrevious, isFirst }) => (
   <button onClick={setPrevious} disabled={isFirst}>
