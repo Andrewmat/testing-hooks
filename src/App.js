@@ -1,5 +1,5 @@
 import React from 'react'
-import Carousel from './examples/Carousel'
+import Carousel from './examples/CarouselExample'
 import './App.scss'
 
 const App = () => {

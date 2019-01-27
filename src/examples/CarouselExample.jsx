@@ -1,36 +1,40 @@
 import React from 'react'
+import classnames from 'classnames'
 import Card from '../components/Card'
 import Async from '../components/Async'
+import useAsyncCache from '../hooks/useAsyncCache'
+import useIterator from '../hooks/useIterator'
 import useToggle from '../hooks/useToggle'
 import { fetchPerson } from '../services/swService'
 import range from '../utils/range'
 import './Carousel.scss'
-import useIterator from '../hooks/useIterator'
-import useAsyncCache from '../hooks/useAsyncCache'
-
-const loading1 = <div className='carousel-item'>...</div>
-const loading2 = <div className='carousel-item'>Loading</div>
 
 const CarouselExample = () => {
-  const [isAltPh, toggleAltPh] = useToggle()
+  const [isDarkMode, setDarkMode] = useToggle()
   const { previous, next, hasPrevious, hasNext, item } = useIterator(
-    range(10, 1),
+    range(1, 10),
   )
 
-  const promise = useAsyncCache(i => fetchPerson(i))
+  const fetchData = useAsyncCache(i => fetchPerson(i))
 
   return (
-    <div className='carousel-example'>
+    <div
+      className={classnames('carousel-example', {
+        'carousel-example--dark': isDarkMode,
+      })}
+    >
+      <div>
+        <button type='button' onClick={setDarkMode}>
+          {isDarkMode ? 'Return of the Jedi' : 'Join the Dark Side'}
+        </button>
+      </div>
       <button onClick={previous} disabled={!hasPrevious}>
         Previous
       </button>
-      <button type='button' onClick={toggleAltPh}>
-        Change Placeholder
-      </button>
       <Async
         key={item}
-        promise={() => promise(item)}
-        placeholder={isAltPh ? loading1 : loading2}
+        promise={() => fetchData(item)}
+        placeholder={<div className='carousel-item'>Loading...</div>}
       >
         {(data, error) => (
           <div className='carousel-item'>

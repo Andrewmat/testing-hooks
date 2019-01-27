@@ -1,6 +1,15 @@
+.carousel-example {
+  background-color: #ddd;
+  color: #333;
+
+  &--dark {
+    background-color: #333;
+    color: #ddd;
+  }
+}
+
 .carousel-item {
   display: block;
-  background-color: #ddd;
   padding: 20px;
   min-height: 150px;
 
