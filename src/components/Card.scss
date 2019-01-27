@@ -1,0 +1,21 @@
+.card {
+  &__title {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  &__data {
+    display: flex;
+    flex-flow: nowrap row;
+
+    :nth-child(1) {
+      font-style: italic;
+      margin-right: 3px;
+    }
+
+    :nth-child(2) {
+      flex-grow: 1;
+      font-weight: bold;
+    }
+  }
+}
