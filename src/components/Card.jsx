@@ -1,5 +1,6 @@
 import React from 'react'
 import useDocumentTitle from '../hooks/useDocumentTitle'
+import GoogleImage from './GoogleImage'
 import './Card.scss'
 
 export default function Card({ data }) {
@@ -27,6 +28,7 @@ export default function Card({ data }) {
         <div>Mass:</div>
         <div>{data.mass}kg</div>
       </div>
+      <GoogleImage query={data.name} />
     </div>
   )
 }
