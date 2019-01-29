@@ -44,7 +44,7 @@ const flux = {
   },
 }
 
-const Async = ({ children, promise, placeholder }) => {
+export default function Async({ children, promise, placeholder }) {
   const [{ pending, data, error }, dispatch] = useReducer(
     flux.reducer,
     flux.initialState,
@@ -71,5 +71,3 @@ const Async = ({ children, promise, placeholder }) => {
 }
 
 Async.propTypes = propTypes
-
-export default Async

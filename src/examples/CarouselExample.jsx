@@ -7,9 +7,9 @@ import useCache from '../hooks/useCache'
 import useToggle from '../hooks/useToggle'
 import { fetchPerson } from '../services/swService'
 import range from '../utils/range'
-import './Carousel.scss'
+import './CarouselExample.scss'
 
-const CarouselExample = () => {
+export default function CarouselExample() {
   const [isDarkMode, setDarkMode] = useToggle()
   const fetchData = useCache(i => fetchPerson(i), { asynchronous: true })
 
@@ -26,13 +26,13 @@ const CarouselExample = () => {
       </div>
       <Carousel
         loop
-        before={({ isFirst, setPrevious }) => (
-          <button onClick={setPrevious} disabled={isFirst}>
+        before={({ isFirst, previous }) => (
+          <button onClick={previous} disabled={isFirst}>
             Previous
           </button>
         )}
-        after={({ isLast, setNext }) => (
-          <button onClick={setNext} disabled={isLast}>
+        after={({ isLast, next }) => (
+          <button onClick={next} disabled={isLast}>
             Next
           </button>
         )}
@@ -60,5 +60,3 @@ const CarouselExample = () => {
     </div>
   )
 }
-
-export default CarouselExample

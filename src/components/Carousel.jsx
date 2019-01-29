@@ -9,6 +9,7 @@ const propTypes = {
   after: PropTypes.func,
   before: PropTypes.func,
   loop: PropTypes.bool,
+  onChange: PropTypes.func,
 }
 
 const defaultBefore = ({ setPrevious }) => (
@@ -21,18 +22,34 @@ const defaultProps = {
   before: defaultBefore,
   after: defaultAfter,
   loop: false,
+  onChange: () => undefined,
 }
 
-const Carousel = ({ children, startIndex, before, after, loop }) => {
-  const { item, next, hasNext, previous, hasPrevious } = useIterator(
+export default function Carousel({
+  children,
+  startIndex,
+  before,
+  after,
+  loop,
+  onChange,
+}) {
+  const { item, index, next, hasNext, previous, hasPrevious } = useIterator(
     Children.toArray(children),
     loop,
     startIndex,
   )
 
   const refProps = {
-    setPrevious: previous,
-    setNext: next,
+    previous() {
+      let previousProps = previous()
+      onChange(previousProps, index)
+      return previousProps
+    },
+    next() {
+      let nextProps = next()
+      onChange(nextProps, index)
+      return nextProps
+    },
     isFirst: !(loop || hasPrevious),
     isLast: !(loop || hasNext),
   }
@@ -48,5 +65,3 @@ const Carousel = ({ children, startIndex, before, after, loop }) => {
 
 Carousel.propTypes = propTypes
 Carousel.defaultProps = defaultProps
-
-export default Carousel
