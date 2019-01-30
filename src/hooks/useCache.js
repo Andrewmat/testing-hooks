@@ -12,7 +12,7 @@ function getKey(args) {
  */
 export default function useCache(
   callback,
-  { asynchronous = false, keyGenerator = getKey } = {},
+  { asynchronous = true, keyGenerator = getKey } = {},
 ) {
   const [map, setMap] = useState(new Map())
   useDebugValue(map.size)

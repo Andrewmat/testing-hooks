@@ -33,8 +33,8 @@ export default function useIterator(list, loop = false, startIndex = 0) {
         const previousIndex = setLimitedIndex(i - 1)
         return genHookProps(previousIndex)
       },
-      hasNext: i < list.length - 1,
-      hasPrevious: i !== 0,
+      hasNext: loop || i < list.length - 1,
+      hasPrevious: loop || i !== 0,
     }
   }
 

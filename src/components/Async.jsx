@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
@@ -44,11 +44,22 @@ const flux = {
   },
 }
 
-export default function Async({ children, promise, placeholder }) {
+export default function Async({ children, promise, deps, placeholder }) {
   const [{ pending, data, error }, dispatch] = useReducer(
     flux.reducer,
     flux.initialState,
   )
+
+  useEffect(() => {
+    dispatch(flux.actions.fetch())
+    promise()
+      .then(resp => dispatch(flux.actions.fulfilled(resp)))
+      .catch(resp =>
+        dispatch(
+          flux.actions.rejected(new Error(resp.statusText || resp.status)),
+        ),
+      )
+  }, deps)
 
   if (pending) {
     return placeholder
@@ -57,15 +68,6 @@ export default function Async({ children, promise, placeholder }) {
   if (data || error) {
     return children(data, error)
   }
-
-  dispatch(flux.actions.fetch())
-  promise()
-    .then(resp => dispatch(flux.actions.fulfilled(resp)))
-    .catch(resp =>
-      dispatch(
-        flux.actions.rejected(new Error(resp.statusText || resp.status)),
-      ),
-    )
 
   return null
 }

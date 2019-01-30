@@ -1,12 +1,5 @@
-export function fetchPerson(id) {
-  return fetch(`https://swapi.co/api/people/${id}/`)
-    .then(resp => {
-      if (!resp.ok) {
-        throw resp
-      }
-      return resp.json()
-    })
-    .catch(error => {
-      throw error
-    })
+import { fetchJson } from './client'
+
+export async function getPerson(id) {
+  return fetchJson(`https://swapi.co/api/people/${id}/`)
 }
