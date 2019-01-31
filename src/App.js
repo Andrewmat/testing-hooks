@@ -1,13 +1,13 @@
 import React from 'react'
-import CacheProvider from './contexts/CacheProvider'
-import CarouselExample from './examples/CarouselExample'
+import CacheProvider from './components/CacheProvider'
+import CardIteration from './examples/CardIteration'
 import './App.scss'
 
 const App = () => {
   return (
     <div>
       <CacheProvider>
-        <CarouselExample />
+        <CardIteration />
       </CacheProvider>
     </div>
   )

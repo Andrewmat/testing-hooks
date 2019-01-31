@@ -1,47 +1,57 @@
 import { useContext, useDebugValue } from 'react'
-import CacheContext from '../contexts/CacheContext'
+import { CacheContext } from '../components/CacheProvider'
 
-function getKey(args) {
-  return JSON.stringify(args)
+function generateKey(args) {
+  return args
+    .map(arg => {
+      if (arg == null) {
+        return String.toString(arg)
+      }
+      if (typeof arg === 'string') {
+        return arg
+      }
+      if (arg instanceof Object && typeof arg.toString === 'function') {
+        return arg.toString()
+      }
+      return String.toString(arg)
+    })
+    .join(',')
 }
 
-/**
- * Caches result of callback function into an internal state
- * @param {function} [callback] async function that caches results according to key
- * @returns function that executes callback and caches results
- */
 /**
  *
  * Caches result of callback function into an internal state
  * @param {function} [callback] async function that caches results according to key
  * @param {string} [namespace] caching namespace to use. Very recommended to use to avoid cache collision
  * @param {string} [key] optional key of cache entry
- * @param {function} [keyGenerator] optional function that generates key. This function receives the parameters array of the function
- * @returns
+ * @param {function} [keyGenerator] optional function that generates key. It receives an array of parameters and must return an string
+ * @returns function that executes callback and caches results. The function has an extra property, clearCache, that removes all cache entries
  */
 export default function useCache(
   callback,
-  { keyGenerator = getKey, key, namespace = '__root' } = {},
+  { keyGenerator = generateKey, key, namespace = '__root', limit } = {},
 ) {
-  const { caches, set } = useContext(CacheContext)
-  useDebugValue(caches[namespace] ? caches[namespace].size : undefined)
+  const { getCache } = useContext(CacheContext)
+  const cache = getCache(namespace)
+  useDebugValue(cache.size)
 
-  function getEntry(key) {
-    return caches[namespace] && caches[namespace].get(key)
-  }
-  function setEntry(key, value) {
-    set(namespace, key, value)
-  }
-
-  return async function(...args) {
+  async function cachedFunction(...args) {
     const finalKey = key || keyGenerator(args)
-    let value = getEntry(finalKey)
+    let value = cache.get(finalKey)
     if (value === undefined) {
       value = await callback(...args)
-      if (value !== null) {
-        setEntry(finalKey, value)
+
+      const isBelowLimit = limit === undefined || cache.size < limit
+      if (value != null && isBelowLimit) {
+        cache.set(finalKey, value)
       }
     }
     return value
   }
+
+  cachedFunction.clearCache = () => {
+    getCache().clear()
+  }
+
+  return cachedFunction
 }

@@ -7,15 +7,15 @@ import useIterator from '../hooks/useIterator'
 import useToggle from '../hooks/useToggle'
 import { getPerson } from '../services/swService'
 import range from '../utils/range'
-import './CarouselExample.scss'
+import './CardIteration.scss'
 
-export default function CarouselExample() {
+export default function CardIteration() {
   const [isDarkMode, setDarkMode] = useToggle()
   const { item, next, hasNext, previous, hasPrevious } = useIterator(
     range(1, 10),
     true,
   )
-  const fetchData = useCache(getPerson, {
+  const getPersonData = useCache(getPerson, {
     key: item,
     namespace: 'swPerson',
   })
@@ -35,16 +35,27 @@ export default function CarouselExample() {
         Previous
       </button>
       <Async
-        promise={() => fetchData(item)}
+        promise={() => getPersonData(item)}
         deps={[item]}
         placeholder={<div className='carousel-item'>Loading...</div>}
       >
         {(data, error) => (
           <div className='carousel-item'>
             {error ? (
-              <span className='carousel-item__error'>
-                Error: {error.message}
-              </span>
+              <div className='carousel-item__error'>
+                Something went wrong :(
+                <div>
+                  {Object.entries(error)
+                    .filter(([_, value]) =>
+                      ['string', 'number', 'boolean'].includes(typeof value),
+                    )
+                    .map(([key, value]) => (
+                      <div>
+                        <strong>{key}</strong>: {value}
+                      </div>
+                    ))}
+                </div>
+              </div>
             ) : (
               <Card data={data} />
             )}

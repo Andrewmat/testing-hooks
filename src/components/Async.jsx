@@ -54,11 +54,7 @@ export default function Async({ children, promise, deps, placeholder }) {
     dispatch(flux.actions.fetch())
     promise()
       .then(resp => dispatch(flux.actions.fulfilled(resp)))
-      .catch(resp =>
-        dispatch(
-          flux.actions.rejected(new Error(resp.statusText || resp.status)),
-        ),
-      )
+      .catch(error => dispatch(flux.actions.rejected(error)))
   }, deps)
 
   if (pending) {
