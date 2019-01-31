@@ -15,7 +15,7 @@ export default function CarouselExample() {
     range(1, 10),
     true,
   )
-  const fetchData = useCache(i => getPerson(i), {
+  const fetchData = useCache(getPerson, {
     key: item,
     namespace: 'swPerson',
   })
