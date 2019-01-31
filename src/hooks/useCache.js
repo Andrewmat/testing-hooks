@@ -1,4 +1,5 @@
-import { useState, useDebugValue } from 'react'
+import { useContext, useDebugValue } from 'react'
+import CacheContext from '../contexts/CacheContext'
 
 function getKey(args) {
   return JSON.stringify(args)
@@ -6,43 +7,41 @@ function getKey(args) {
 
 /**
  * Caches result of callback function into an internal state
- * @param {function} [callback] function to receive caching functions into
- * @param {boolean} [asynchronous=false] whether the callback function is async or returns a promise, and the result of the promise should be cached
+ * @param {function} [callback] async function that caches results according to key
  * @returns function that executes callback and caches results
+ */
+/**
+ *
+ * Caches result of callback function into an internal state
+ * @param {function} [callback] async function that caches results according to key
+ * @param {string} [namespace] caching namespace to use. Very recommended to use to avoid cache collision
+ * @param {string} [key] optional key of cache entry
+ * @param {function} [keyGenerator] optional function that generates key. This function receives the parameters array of the function
+ * @returns
  */
 export default function useCache(
   callback,
-  { asynchronous = true, keyGenerator = getKey } = {},
+  { keyGenerator = getKey, key, namespace = '__root' } = {},
 ) {
-  const [map, setMap] = useState(new Map())
-  useDebugValue(map.size)
+  const { caches, set } = useContext(CacheContext)
+  useDebugValue(caches[namespace] ? caches[namespace].size : undefined)
 
   function getEntry(key) {
-    return map.get(key)
+    return caches[namespace] && caches[namespace].get(key)
   }
   function setEntry(key, value) {
-    setMap(map.set(key, value))
+    set(namespace, key, value)
   }
 
-  if (asynchronous) {
-    return async function(...args) {
-      const key = keyGenerator(args)
-      let value = getEntry(key)
-      if (value === undefined) {
-        value = await callback(...args)
-        setEntry(key, value)
+  return async function(...args) {
+    const finalKey = key || keyGenerator(args)
+    let value = getEntry(finalKey)
+    if (value === undefined) {
+      value = await callback(...args)
+      if (value !== null) {
+        setEntry(finalKey, value)
       }
-      return value
     }
-  } else {
-    return function(...args) {
-      const key = keyGenerator(args)
-      let value = getEntry(key)
-      if (value === undefined) {
-        value = callback(...args)
-        setEntry(key, value)
-      }
-      return value
-    }
+    return value
   }
 }

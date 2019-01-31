@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useDebugValue, useEffect, useState } from 'react'
 
 export default function useDocumentTitle(title) {
   const [originalTitle, setOriginalTitle] = useState(document.title)
+  useDebugValue(title)
   useEffect(() => {
     setOriginalTitle(document.title)
     document.title = title

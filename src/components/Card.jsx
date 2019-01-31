@@ -40,7 +40,10 @@ function renderImage({ data }) {
 export default function Card(props) {
   const { data } = props
   useDocumentTitle(`${data.name} - SWDB`)
-  const promise = useCache(() => searchImage(data.name))
+  const promise = useCache(() => searchImage(data.name), {
+    key: data.name,
+    namespace: 'img',
+  })
 
   return (
     <div className='card'>

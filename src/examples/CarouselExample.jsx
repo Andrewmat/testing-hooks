@@ -3,21 +3,22 @@ import classnames from 'classnames'
 import Card from '../components/Card'
 import Async from '../components/Async'
 import useCache from '../hooks/useCache'
+import useIterator from '../hooks/useIterator'
 import useToggle from '../hooks/useToggle'
 import { getPerson } from '../services/swService'
 import range from '../utils/range'
 import './CarouselExample.scss'
-import useIterator from '../hooks/useIterator'
 
 export default function CarouselExample() {
   const [isDarkMode, setDarkMode] = useToggle()
-  const fetchData = useCache(i => {
-    return getPerson(i)
-  })
   const { item, next, hasNext, previous, hasPrevious } = useIterator(
     range(1, 10),
     true,
   )
+  const fetchData = useCache(i => getPerson(i), {
+    key: item,
+    namespace: 'swPerson',
+  })
 
   return (
     <div
