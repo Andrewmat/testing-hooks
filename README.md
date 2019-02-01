@@ -170,6 +170,9 @@ const cacheConfig = {
   // optional key of cache entry
   // It overwrites the keyGenerator function
   key,
+  
+  // optional key to limit entries inside the namespace
+  limit
 }
 useCache(myFetch, cacheConfig)
 
@@ -196,7 +199,41 @@ There are also some components that I developed using the aforementioned custom 
 
 ### Async
 
-TODO
+It receives an async function as prop, and resolves/reject it using render props
+
+```jsx
+function MyComponent() {
+  return (
+    <Async promise={myFetch}>
+      {(data, error) => {
+        if (error) {
+          console.error(error);
+          return <p>Something is wrong</p>;
+        }
+        return <div>{data}</div>;
+      }}
+    </Async>
+}
+```
+
+It can also receive a `deps` prop. `deps` is an control array, so the async function is only executed when an value inside it is changed.
+
+```jsx
+function MyComponent({ id }) {
+  return (
+    <Async promise={() => myFetch(id)} deps={[id]}>
+      {(data, error) => {
+        if (error) {
+          console.error(error);
+          return <p>Something is wrong</p>;
+        }
+        return <div>{data}</div>;
+      }}
+    </Async>
+}
+```
+
+It uses `useReducer` to manipulate the promise state and `useEffect` to call the promise.
 
 ### Card
 
