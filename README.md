@@ -60,6 +60,8 @@ function MyComponent() {
 
 ### useCounter
 
+**Standalone hook**
+
 It returns the current value, and an increment function, in array form
 
 ```jsx
@@ -71,6 +73,8 @@ function MyComponent() {
 
 ### useDocumentTitle
 
+**Standalone hook**
+
 It receives an title to apply to the document. It also returns to the previous title when the component unmounts
 
 ```jsx
@@ -81,6 +85,8 @@ function MyComponent() {
 ```
 
 ### useIterator
+
+**Standalone hook**
 
 It receives an array, and returns an controller to iterate in this array
 
@@ -199,6 +205,8 @@ There are also some components that I developed using the aforementioned custom 
 
 ### Async
 
+**Standalone component**
+
 It receives an async function as prop, and resolves/reject it using render props
 
 ```jsx
@@ -237,19 +245,136 @@ It uses `useReducer` to manipulate the promise state and `useEffect` to call the
 
 ### Card
 
-TODO
+It receives data for display. It also uses this data to make a request for Google Custom Search looking for images related to this data (in this case in particular, Star Wars Characters)
+
+It uses `useDocumentTitle` to set document title according to data and `useCache` to cache the response of Google Custom Search
 
 ### Carousel
 
-TODO
+**Standalone component**
+
+Despite the name, it is not actually a carousel. It receives multiple children, and render buttons to iterate among them
+
+```jsx
+function MyComponent() {
+  return (
+    <Carousel
+      // first child to be shown. Defaults to zero
+      startIndex={0}
+      
+      // what should be rendered before the Carousel
+      // it should be a render function that receives props and return a component
+      // defaults to a previous button
+      before={renderFunction}
+      
+      // what should be rendered after the Carousel
+      // it should be a render function that receives props and return a component
+      // defaults to a next button
+      after={renderFunction}
+      
+      // whether or not the carousel should loop
+      // defaults to false
+      loop={false}
+      
+      // optional function that executes whenever the shown child is changed
+      onChange={changeListener}
+    >
+      {/* It chooses among one of the children to render */}
+      <Component1/>
+      <Component2/>
+      <Component3/>
+    </Carousel>
+  )
+}
+```
+
+The before and after props should be render function that receives the following props
+
+```jsx
+function MyCarouselController({
+  // function that when called, iterates to the previous child
+  previous,
+  
+  // function that when called, iterates to the next child
+  next,
+  
+  // if does not have previous child to be shown
+  // if loop is true, it always returns false
+  isFirst,
+  
+  // if does not have next child to be shown
+  // if loop is true, it always returns false
+  isLast
+}) {
+  return (
+    <>
+      <button onClick={previous} disabled={isFirst}>Previous</button>
+      <button onClick={next} disabled={isLast}>Next</button>
+      
+    </>
+  )
+}
+```
+
+It uses `useIterator` to iterate among its children
 
 ### CacheProvider
 
+Wrapper of the cache context. It initializes the context, creates the cache accessors, and wraps its children with the cache context provider. 
+
+```jsx
+function MyComponent() {
+  return (
+    <CacheProvider>
+      <ComponentWithCacheAccess />
+    </CacheProvider>
+  )
+}
+```
+
+The acessor are created through its function `getCache(namespace)`. This function is provided to the cache context value.
+
+This context uses the following format:
+
+```javascript
+const cacheContextValue = {
+  // this is only used for storage, and should not be used
+  caches: {
+    [namespace]: new Map(),
+    [namespace2]: new Map(),
+  },
+  
+  // function that returns a cache with the given namespace
+  getCache = namespace => ({
+    // size of the cache
+    size,
+    
+    // function that given a key for an entry, returns its value
+    get: key => value,
+    
+    // function that sets or updates a cache entry
+    set: (key, value) => undefined,
+
+    // function that removes a cache entry
+    remove: key => undefined,
+    
+    // function that removes all entries from this cache
+    clear: () => undefined,
+  })
+}
+```
+
+It is used by `useCache` to store and access cache
+
+It uses `useContext` to consume the cache context, and `useState` to manage the cache context value
+
+### CardIteration
+
 TODO
 
-### Thanks
+## Thanks
 
-Thanks for these guys there:
+Thanks for these guys here:
 
 * SWAPI, for all the data and support it gives for free, and for all the times it received tens of requests because of some infinite loop bug that I created.
 * React Team, for all the effort into creating the Hooks idea, one that may create a new paradigm inside Frontend (and UI in general) development.
