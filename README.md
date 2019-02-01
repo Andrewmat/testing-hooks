@@ -14,7 +14,7 @@ It uses SWAPI for Star Wars data, and Google Custom Search for images.
 
 ## How to run
 
-This was bootstrapped with `create-react-app`, so basically what you need to do after cloning is just installing the packages and run the start script
+This was bootstrapped with `create-react-app`, so basically what you need to do after cloning is installing the packages and run the start script
 
 ```
 # HTTPS
@@ -32,6 +32,15 @@ yarn start
 # NPM
 npm install
 npm start
+```
+
+Ohhh, I forgot to add. It also uses the Google Custom Search API. If you want to see the images, you will need to generate an API key for you and add these into an `.env.local` file
+
+These are the environment variables inside `.env.local`:
+
+```
+APP_GOOGLESEARCH_API_KEY=<<MY API KEY>>
+APP_GOOGLESEARCH_CONTROL_ID=<<MY CONTROL SEARCH ID>>
 ```
 
 ## So... where is the hook?
