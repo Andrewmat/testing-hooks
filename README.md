@@ -185,19 +185,19 @@ function MyComponent({ data }) {
 
 There are also some components that I developed using the aforementioned custom hooks, as well as the original React hooks.
 
-### <Async>
+### Async
 
 TODO
 
-### <Card>
+### Card
 
 TODO
 
-### <Carousel>
+### Carousel
 
 TODO
 
-### <CacheProvider>
+### CacheProvider
 
 TODO
 
