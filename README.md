@@ -34,7 +34,7 @@ npm install
 npm start
 ```
 
-Ohhh, I forgot to add. It also uses the Google Custom Search API. If you want to see the images, you will need to generate an API key for you and add these into an `.env.local` file
+It also uses the Google Custom Search API. If you want to see the images, you will need to generate an API key for you and add these into an `.env.local` file
 
 These are the environment variables inside `.env.local`:
 
