@@ -22,7 +22,7 @@ function generateKey(args) {
  *
  * Caches result of callback function into an internal state
  * @param {function} [callback] async function that caches results according to key
- * @param {string} [namespace] caching namespace to use. Very recommended to use to avoid cache collision
+ * @param {string} [namespace] caching namespace to use. Very recommended to avoid cache collision when cache is used in different contexts
  * @param {string} [key] optional key of cache entry
  * @param {function} [keyGenerator] optional function that generates key. It receives an array of parameters and must return an string
  * @returns function that executes callback and caches results. The function has an extra property, clearCache, that removes all cache entries
@@ -50,7 +50,7 @@ export default function useCache(
   }
 
   cachedFunction.clearCache = () => {
-    getCache().clear()
+    cache.clear()
   }
 
   return cachedFunction

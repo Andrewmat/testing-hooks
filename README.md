@@ -1,31 +1,205 @@
+# Testing React Hooks
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Learn More
+## Main Goal
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To understand, explore, and play with React Hooks
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## What it is actually?
 
-### Code Splitting
+An React App that shows cards of Star Wars characters. I nicknamed it "SWDB". It may grow, but for now I'm only focusing on using hooks.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+It uses SWAPI for Star Wars data, and Google Custom Search for images.
 
-### Analyzing the Bundle Size
+## How to run
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+This was bootstrapped with `create-react-app`, so basically what you need to do after cloning is just installing the packages and run the start script
 
-### Making a Progressive Web App
+```
+# HTTPS
+git clone https://github.com/Andrewmat/testing-hooks.git
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+# SSH
+git clone git@github.com:Andrewmat/testing-hooks.git
 
-### Advanced Configuration
+cd testing-hooks
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+# Yarn
+yarn
+yarn start
 
-### Deployment
+# NPM
+npm install
+npm start
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+## So... where is the hook?
 
-### `npm run build` fails to minify
+Inside the `/src/hooks` there are multiple hooks that I developed. I'm avoiding using external package dependencies, and focusing only on the original React resources for now
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### useToggle
+
+It simply stores an boolean value, and returns a function to toggle it. If no argument is given, the initial value is false
+
+```jsx
+function MyComponent() {
+  const initialValue = true
+  const [myBool, toggleMyBool] = useToggle(initialValue)
+}
+```
+
+### useCounter
+
+It returns the current value, and an increment function, in array form
+
+```jsx
+function MyComponent() {
+  const [value, increment] = useCounter
+  return <button onClick={increment}>value</button>
+}
+```
+
+### useDocumentTitle
+
+It receives an title to apply to the document. It also returns to the previous title when the component unmounts
+
+```jsx
+function MyComponent() {
+  useDocumentTitle('Example Title')
+  // ...
+}
+```
+
+### useIterator
+
+It receives an array, and returns an controller to iterate in this array
+
+```jsx
+function MyComponent() {
+  const myList = ['Alice', 'Ben', 'Charles']
+  const iterator = useIterator(list)
+  return (
+    <>
+      <button onClick={iterator.previous}>Previous</button>
+      {iterator.item}
+      <button onClick={iterator.next}>Next</button>
+    </>
+  )
+}
+```
+
+useIterator also can received two more arguments
+
+```jsx
+useIterator(list, loop, startIndex)
+// loop: Whether or not should the list loop. Defaults to false
+// startIndex: What index should be the initial item. Defaults to 0
+```
+
+The controller returned by this hook is composed of the following attributes:
+
+```jsx
+const iterator = useIterator(list)
+
+// current item being iterated
+iterator.item
+
+// index of the current item
+iterator.index
+
+// function to iterate to the next item on the list
+// returns the controller so it can be chained
+const nextIterator = iterator.next()
+
+// function to iterate to the previous item on the list
+// returns the controller so it can be chained
+const previousIterator = iterator.previous()
+
+// boolean that detects if it has a next item on the list
+// it also accounts if the iterator loops
+iterator.hasNext
+
+// boolean that detects if it has a previous item on the list
+// it also accounts if the iterator loops
+iterator.hasPrevious
+```
+
+### useCache
+
+A "complex" system to use cache in the application. It uses the CacheProvider (inside `/src/components`) that creates an context used for caching resources
+
+It receives an async function, and it returns an async function that mimics the given function, using caching resources whenever possible
+
+```jsx
+function myFetch(id) {
+  returns fetch(`${apiUrl}/${id}`)
+}
+
+function MyComponent() {
+  const myCachedFetch = useCache(myFetch)
+
+  return (
+    <MyAnotherComponent onChange={myCachedFetch} />
+  )
+}
+```
+
+It also receives a config object as second parameter. The config object is the following:
+
+```jsx
+const cacheConfig = {
+  // string describing caching namespace to use. Very recommended to avoid cache collision when cache is used in different contexts
+  namespace,
+
+  // optional function that generates key. It receives an array of parameters and must return an string
+  keyGenerator,
+
+  // optional key of cache entry. It overwrites the keyGenerator function
+  key,
+}
+useCache(myFetch, cacheConfig)
+
+```
+
+The returned function also has a new attribute: `clearCache`, a function that removes all the entries from the cache of the given namespace
+
+```jsx
+function MyComponent({ data }) {
+  const cachedFetch = useCache(myFetch, { namespace: 'my-fetch' })
+
+  return (
+    <>
+      <button onClick={() => cachedFetch(data)}>Fetch data<button>
+      <button onClick={() => cachedFetch.clearCache()}>Reset cache<button>
+    </>
+  )
+}
+```
+
+## What about components?
+
+There are also some components that I developed using the aforementioned custom hooks, as well as the original React hooks.
+
+### <Async/>
+
+TODO
+
+### <Card/>
+
+TODO
+
+### <Carousel/>
+
+TODO
+
+### <CacheProvider/>
+
+TODO
+
+### Thanks
+
+Thanks for these guys there:
+
+* SWAPI, for all the data and support it gives for free, and for all the times it received tens of requests because of some infinite loop bug that I created.
+* React Team, for all the effort into creating the Hooks idea, one that may create a new paradigm inside Frontend (and UI in general) development.
