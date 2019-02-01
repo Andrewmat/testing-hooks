@@ -92,9 +92,9 @@ function MyComponent() {
 useIterator also can received two more arguments
 
 ```jsx
-useIterator(list, loop, startIndex)
 // loop: Whether or not should the list loop. Defaults to false
 // startIndex: What index should be the initial item. Defaults to 0
+useIterator(list, loop, startIndex)
 ```
 
 The controller returned by this hook is composed of the following attributes:
@@ -149,13 +149,17 @@ It also receives a config object as second parameter. The config object is the f
 
 ```jsx
 const cacheConfig = {
-  // string describing caching namespace to use. Very recommended to avoid cache collision when cache is used in different contexts
+  // string describing caching namespace to use.
+  // Very recommended to avoid cache collision
+  // when cache is used in different contexts
   namespace,
 
-  // optional function that generates key. It receives an array of parameters and must return an string
+  // optional function that generates key
+  // It receives an array of parameters and must return an string
   keyGenerator,
 
-  // optional key of cache entry. It overwrites the keyGenerator function
+  // optional key of cache entry
+  // It overwrites the keyGenerator function
   key,
 }
 useCache(myFetch, cacheConfig)
@@ -181,19 +185,19 @@ function MyComponent({ data }) {
 
 There are also some components that I developed using the aforementioned custom hooks, as well as the original React hooks.
 
-### <Async/>
+### <Async>
 
 TODO
 
-### <Card/>
+### <Card>
 
 TODO
 
-### <Carousel/>
+### <Carousel>
 
 TODO
 
-### <CacheProvider/>
+### <CacheProvider>
 
 TODO
 
