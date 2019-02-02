@@ -1,32 +1,45 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 50px auto;
-  width: 400px;
-  height: 400px;
-  text-align: center;
+$color-bg-light: #ccc;
+$color-bg-dark: #444;
+$color-fg-light: #444;
+$color-fg-dark: #ddd;
+$color-bd-light: #ddd;
+$color-bd-dark: #222;
 
-  background-color: #ccc;
-  color: #333;
+.app-root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   button {
-    border: none;
-    width: 80px;
-    height: 50px;
-    margin: auto;
-    background-color: #333;
-    color: #ccc;
-  }
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
 
-  &--dark {
-    background-color: #333;
-    color: #ccc;
+    border-width: 1px;
+    border-style: solid;
+    background-color: $color-bg-light;
+    border-color: $color-bd-light;
+    color: $color-fg-light;
 
-    button {
-      background-color: #ccc;
-      color: #333;
+    &:hover {
+      background-color: lighten($color-bg-light, 10%);
+      border-color: darken($color-bd-light, 10%);
+      color: darken($color-fg-light, 10%);
+    }
+
+    &.is-dark {
+      background-color: $color-bg-dark;
+      border-color: $color-bd-dark;
+      color: $color-fg-dark;
+
+      &:hover {
+        background-color: lighten($color-bg-dark, 10%);
+        border-color: darken($color-bd-dark, 10%);
+        color: darken($color-fg-dark, 10%);
+      }
     }
   }
-}
 
+  .dark-mode-btn {
+    display: block;
+    margin: 10px auto;
+  }
+}

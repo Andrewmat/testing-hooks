@@ -176,7 +176,7 @@ const cacheConfig = {
   // optional key of cache entry
   // It overwrites the keyGenerator function
   key,
-  
+
   // optional key to limit entries inside the namespace
   limit
 }
@@ -261,21 +261,21 @@ function MyComponent() {
     <Carousel
       // first child to be shown. Defaults to zero
       startIndex={0}
-      
+
       // what should be rendered before the Carousel
       // it should be a render function that receives props and return a component
       // defaults to a previous button
       before={renderFunction}
-      
+
       // what should be rendered after the Carousel
       // it should be a render function that receives props and return a component
       // defaults to a next button
       after={renderFunction}
-      
+
       // whether or not the carousel should loop
       // defaults to false
       loop={false}
-      
+
       // optional function that executes whenever the shown child is changed
       onChange={changeListener}
     >
@@ -294,14 +294,14 @@ The before and after props should be render function that receives the following
 function MyCarouselController({
   // function that when called, iterates to the previous child
   previous,
-  
+
   // function that when called, iterates to the next child
   next,
-  
+
   // if does not have previous child to be shown
   // if loop is true, it always returns false
   isFirst,
-  
+
   // if does not have next child to be shown
   // if loop is true, it always returns false
   isLast
@@ -310,7 +310,7 @@ function MyCarouselController({
     <>
       <button onClick={previous} disabled={isFirst}>Previous</button>
       <button onClick={next} disabled={isLast}>Next</button>
-      
+
     </>
   )
 }
@@ -320,7 +320,7 @@ It uses `useIterator` to iterate among its children
 
 ### CacheProvider
 
-Wrapper of the cache context. It initializes the context, creates the cache accessors, and wraps its children with the cache context provider. 
+Wrapper of the cache context. It initializes the context, creates the cache accessors, and wraps its children with the cache context provider.
 
 ```jsx
 function MyComponent() {
@@ -343,21 +343,21 @@ const cacheContextValue = {
     [namespace]: new Map(),
     [namespace2]: new Map(),
   },
-  
+
   // function that returns a cache with the given namespace
   getCache = namespace => ({
     // size of the cache
     size,
-    
+
     // function that given a key for an entry, returns its value
     get: key => value,
-    
+
     // function that sets or updates a cache entry
     set: (key, value) => undefined,
 
     // function that removes a cache entry
     remove: key => undefined,
-    
+
     // function that removes all entries from this cache
     clear: () => undefined,
   })
@@ -368,7 +368,7 @@ It is used by `useCache` to store and access cache
 
 It uses `useContext` to consume the cache context, and `useState` to manage the cache context value
 
-### CardIteration
+### CardIterator
 
 TODO
 
