@@ -1,11 +1,13 @@
 import { useContext, useDebugValue } from 'react'
+import { sha256 } from 'js-sha256'
 import { CacheContext } from '../components/CacheProvider'
+import { warn } from '../utils/devconsole'
 
-function generateKey(args) {
-  return args
+function defaultKeyGenerator(args) {
+  const stringArgs = (args || [])
     .map(arg => {
       if (arg == null) {
-        return String.toString(arg)
+        return String(arg).toString()
       }
       if (typeof arg === 'string') {
         return arg
@@ -13,9 +15,11 @@ function generateKey(args) {
       if (arg instanceof Object && typeof arg.toString === 'function') {
         return arg.toString()
       }
-      return String.toString(arg)
+      return String(arg).toString()
     })
     .join(',')
+
+  return sha256(stringArgs)
 }
 
 /**
@@ -29,11 +33,17 @@ function generateKey(args) {
  */
 export default function useCache(
   callback,
-  { keyGenerator = generateKey, key, namespace = '__root', limit } = {},
+  namespace = '__root',
+  { keyGenerator = defaultKeyGenerator, key, limit } = {},
 ) {
   const { getCache } = useContext(CacheContext)
   const cache = getCache(namespace)
   useDebugValue(cache.size)
+  if (namespace === '__root') {
+    warn(
+      `[useCache] Using default namespace since no namespace is given.\n\tA namespace is recommended and can be added in the second parameter "useCache(func, namespace)"`,
+    )
+  }
 
   async function cachedFunction(...args) {
     const finalKey = key || keyGenerator(args)

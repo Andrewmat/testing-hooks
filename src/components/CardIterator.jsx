@@ -13,10 +13,7 @@ export default function CardIterator({ darkMode = false }) {
     range(1, 6),
     true,
   )
-  const getPersonData = useCache(getPerson, {
-    key: item,
-    namespace: 'swPerson',
-  })
+  const cachedGetPerson = useCache(getPerson, 'swPerson')
 
   return (
     <div
@@ -39,7 +36,7 @@ export default function CardIterator({ darkMode = false }) {
       </div>
       <div className='card-iterator__item-wrapper'>
         <Async
-          promise={() => getPersonData(item)}
+          promise={() => cachedGetPerson(item)}
           deps={[item]}
           placeholder={<div className='card-iterator__item'>Loading...</div>}
         >

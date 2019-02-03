@@ -1,6 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import Async from './Async'
+import CardImage from './CardImage'
 import useDocumentTitle from '../hooks/useDocumentTitle'
 import useCache from '../hooks/useCache'
 import { searchImage } from '../services/googleService'
@@ -15,68 +16,6 @@ const placeholderImage = (
   />
 )
 
-function isImage(image) {
-  const isLinkOk = /\.(jpe?g|png|webp)$/.test(image.link)
-  const isMimeOk = /^image\//.test(image.mime)
-  return isLinkOk && isMimeOk
-}
-
-const calcDimensions = ({ width, height }) => {
-  const MAX_WIDTH = 500
-  const MAX_HEIGHT = 250
-
-  if (width <= MAX_WIDTH && height <= MAX_HEIGHT) {
-    return { width, height }
-  }
-  let calcWidth = width
-  let calcHeight = height
-  const ratio = width / height
-
-  if (calcWidth > MAX_WIDTH) {
-    calcWidth = MAX_WIDTH
-    calcHeight = calcWidth / ratio
-  }
-  if (calcHeight > MAX_HEIGHT) {
-    calcHeight = MAX_HEIGHT
-    calcWidth = calcHeight * ratio
-  }
-
-  return { width: Math.floor(calcWidth), height: Math.floor(calcHeight) }
-}
-
-const renderCardImage = data => (response, error) => {
-  if (error) {
-    if (error.status === 403) {
-      return (
-        <div>
-          Oops. It looks like we ran out of image lookups... Look again
-          tomorrow!
-        </div>
-      )
-    } else {
-      return <div>I find the lack of images disturbing</div>
-    }
-  }
-  const result = response.items.find(resultItem => isImage(resultItem))
-  const dimensions = calcDimensions(result.image)
-  return (
-    <div
-      className='card__image-wrapper'
-      style={{
-        maxHeight: `${dimensions.height}px`,
-        maxWidth: `${dimensions.width}px`,
-      }}
-    >
-      <img
-        src={result.link}
-        alt={data.name}
-        height={dimensions.height}
-        width={dimensions.width}
-      />
-    </div>
-  )
-}
-
 const dataDescription = {
   eye_color: 'Eye color',
   skin_color: 'Skin color',
@@ -88,10 +27,7 @@ const dataDescription = {
 export default function Card(props) {
   const { data, darkMode } = props
   useDocumentTitle(`${data.name} - SWDB`)
-  const promise = useCache(() => searchImage(data.name), {
-    key: data.name,
-    namespace: 'img',
-  })
+  const cachedSearchImage = useCache(searchImage, 'img')
 
   return (
     <div
@@ -108,11 +44,13 @@ export default function Card(props) {
         </div>
       ))}
       <Async
-        promise={promise}
+        promise={() => cachedSearchImage(data.name)}
         placeholder={placeholderImage}
         deps={[data.name]}
       >
-        {renderCardImage(data)}
+        {(response, error) => (
+          <CardImage response={response} error={error} name={data.name} />
+        )}
       </Async>
     </div>
   )

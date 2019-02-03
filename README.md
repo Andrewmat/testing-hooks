@@ -160,15 +160,22 @@ function MyComponent() {
 }
 ```
 
-It also receives a config object as second parameter. The config object is the following:
+It receives a namespace as second argument. If not set, it uses `__root` as default, althought I recommend to always use it to avoid name clashes between diferent contexts
+
+```jsx
+function MyComponent() {
+  const myCachedFetch = useCache(myFetch, 'myNamespace')
+
+  return (
+    <MyAnotherComponent onChange={myCachedFetch} />
+  )
+}
+```
+
+It also receives a config object as third parameter. The config object is as follows:
 
 ```jsx
 const cacheConfig = {
-  // string describing caching namespace to use.
-  // Very recommended to avoid cache collision
-  // when cache is used in different contexts
-  namespace,
-
   // optional function that generates key
   // It receives an array of parameters and must return an string
   keyGenerator,
@@ -180,7 +187,7 @@ const cacheConfig = {
   // optional key to limit entries inside the namespace
   limit
 }
-useCache(myFetch, cacheConfig)
+useCache(myFetch, 'myNamespace', cacheConfig)
 
 ```
 

@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from 'react'
 import PropTypes from 'prop-types'
+import { warn } from '../utils/devconsole'
 
 const propTypes = {
   children: PropTypes.func.isRequired,
@@ -51,11 +52,16 @@ export default function Async({ children, promise, deps, placeholder }) {
   )
 
   useEffect(() => {
+    if (deps == null) {
+      warn(
+        `[Async] No deps array was given, so <Async> will only call async function when is mounted\n\tTo fix this, you should set the deps prop to the appropriate value`,
+      )
+    }
     dispatch(flux.actions.fetch())
     promise()
       .then(resp => dispatch(flux.actions.fulfilled(resp)))
       .catch(error => dispatch(flux.actions.rejected(error)))
-  }, deps)
+  }, deps || [])
 
   if (pending) {
     return placeholder
