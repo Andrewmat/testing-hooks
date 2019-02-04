@@ -49,14 +49,57 @@ Inside the `/src/hooks` there are multiple hooks that I developed. I'm avoiding 
 
 ### useToggle
 
-It simply stores an boolean value, and returns a function to toggle it. If no argument is given, the initial value is false
+**Standalone hook**
+
+It stores one of two options, and returns the current option and a function that changes to the other option.
+As default, it simply changes between booleans, with false as initial value.
+
+```jsx
+function MyComponent() {
+  const [myBool, toggleMyBool] = useToggle()
+
+  // button label is false/true
+  return (
+    <button onClick={toggleMyBool}>
+      {myBool}
+    </button>
+  )
+}
+```
+
+It also can receive a initial boolean value
 
 ```jsx
 function MyComponent() {
   const initialValue = true
   const [myBool, toggleMyBool] = useToggle(initialValue)
+
+  // button label is true/false
+  return (
+    <button onClick={toggleMyBool}>
+      {myBool}
+    </button>
+  )
 }
 ```
+
+It also can receive an array of two elements, and if so, it toggles between then. The index 0 will be the initial value in this case
+
+```jsx
+function MyComponent() {
+  const [theme, toggleTheme] = useToggle(['blue', 'pink'])
+
+  return (
+    <>
+      This is the {theme} theme!
+      <button onClick={toggleTheme} className={`${theme}-theme`}>
+        Toggle
+      </button>
+    </>
+  )
+}
+```
+
 
 ### useCounter
 
