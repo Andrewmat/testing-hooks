@@ -5,16 +5,16 @@
   flex-flow: row nowrap;
   margin: auto;
   width: 80vw;
-  height: 475px;
+  height: 477px;
 
   &__btn-wrapper {
-    flex-grow: 1;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
+    width: 130px;
   }
   &__item-wrapper {
-    flex-grow: 3;
+    flex-grow: 1;
   }
 
   &__btn {
