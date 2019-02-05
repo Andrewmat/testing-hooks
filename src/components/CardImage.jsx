@@ -5,9 +5,9 @@ export default function CardImage({ name, response, error }) {
     if (error.status === 403) {
       return (
         <div>
-          Oops. It looks like we ran out of image lookups...<br/>
-          Look again
-          tomorrow!
+          Oops. It looks like we ran out of image lookups...
+          <br />
+          Look again tomorrow!
         </div>
       )
     } else {

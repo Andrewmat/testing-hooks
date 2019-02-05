@@ -1,12 +1,13 @@
 import React from 'react'
 import classnames from 'classnames'
-import CacheProvider from './components/CacheProvider'
+import { useToggle, CacheProvider } from '@andrewmat/hooks'
 import CardIterator from './components/CardIterator'
-import useToggle from './hooks/useToggle'
 import github from './github.png'
 import './App.scss'
 
-const App = () => {
+console.log(useToggle.toString())
+
+function App() {
   const [darkMode, setDarkMode] = useToggle()
   return (
     <div className='app-root'>
@@ -23,8 +24,16 @@ const App = () => {
       <CacheProvider>
         <CardIterator darkMode={darkMode} />
       </CacheProvider>
-      <div className="github-link">
-        Check it on <a href="https://github.com/Andrewmat/testing-hooks" target="_blank"><img src={github}/><span>Github</span></a>
+      <div className='github-link'>
+        Check it on{' '}
+        <a
+          href='https://github.com/Andrewmat/testing-hooks'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <img src={github} alt='Github logo' />
+          <span>Github</span>
+        </a>
       </div>
     </div>
   )

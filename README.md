@@ -45,7 +45,7 @@ APP_GOOGLESEARCH_CONTROL_ID=<<MY CONTROL SEARCH ID>>
 
 ## So... where is the hook?
 
-Inside the `/src/hooks` there are multiple hooks that I developed. I'm avoiding using external package dependencies, and focusing only on the original React resources for now
+I published into the `@andrewmat/hooks`. I'm avoiding using external package dependencies, and focusing only on the original React resources for now.
 
 ### useToggle
 
@@ -100,7 +100,6 @@ function MyComponent() {
 }
 ```
 
-
 ### useCounter
 
 **Standalone hook**
@@ -109,7 +108,7 @@ It returns the current value, and an increment function, in array form
 
 ```jsx
 function MyComponent() {
-  const [value, increment] = useCounter
+  const [value, increment] = useCounter()
   return <button onClick={increment}>value</button>
 }
 ```

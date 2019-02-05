@@ -1,9 +1,8 @@
 import React from 'react'
 import classnames from 'classnames'
+import { useDocumentTitle, useCache } from '@andrewmat/hooks'
 import Async from './Async'
 import CardImage from './CardImage'
-import useDocumentTitle from '../hooks/useDocumentTitle'
-import useCache from '../hooks/useCache'
 import { searchImage } from '../services/googleService'
 import './Card.scss'
 

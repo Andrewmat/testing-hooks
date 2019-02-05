@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@andrewmat/hooks@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@andrewmat/hooks/-/hooks-0.2.4.tgz#a431b3055ce12da891ad178141e7c8be0f0638a5"
+  integrity sha512-83X6zNtu3yuQOgemekWzctV33VzRHrodsp3RE9mxNt9ZRLeyYFePNx7SCyDEJnQmtPyYR835UZigqPebiw1Rww==
+  dependencies:
+    react "^16.8.0-alpha.1"
+    react-dom "^16.8.0-alpha.1"
+
 "@babel/code-frame@7.0.0", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"

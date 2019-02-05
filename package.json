@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://andrewmat.github.io/swbd",
   "dependencies": {
+    "@andrewmat/hooks": "^0.2.4",
     "@babel/core": "7.1.6",
     "@svgr/webpack": "2.4.1",
     "babel-core": "7.0.0-bridge.0",

@@ -1,7 +1,6 @@
 import React, { Children } from 'react'
 import PropTypes from 'prop-types'
-
-import useIterator from '../hooks/useIterator'
+import { useIterator } from '@andrewmat/hooks'
 
 const propTypes = {
   children: PropTypes.node.isRequired,
